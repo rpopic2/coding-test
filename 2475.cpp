@@ -2,8 +2,6 @@
 #include <cmath>
 using namespace std;
 
-int readPow();
-
 int main()
 {
     int a, result = 0;
