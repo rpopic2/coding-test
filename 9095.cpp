@@ -12,12 +12,16 @@ int main()
     int n, r = 0;
     cin >> n;
 
-    for (int i = 1; i <= 3; i++)
+    for (int k = 0; k < n; k++)
     {
-        int j = n - i;
-        if (j < 0) break;
-        r += a[j];
+        for (int i = 1; i <= 3; i++)
+        {
+            int j = n - i;
+            if (j < 0) break;
+            r += a[j];
+        }
     }
+
     a[n] = r;
 
     cout << r;
