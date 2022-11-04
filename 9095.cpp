@@ -1,12 +1,26 @@
 #include <iostream>
+#include <algorithm>
 
-//too hard......
 using namespace std;
+const size_t MAX = 10;
+
+int a[MAX];
+
 int main()
 {
-    int i;
-    cin >> i;
+    a[0] = 1;
+    int n, r = 0;
+    cin >> n;
 
-    cout << i;
+    for (int i = 1; i <= 3; i++)
+    {
+        int j = n - i;
+        if (j < 0) break;
+        r += a[j];
+    }
+    a[n] = r;
+
+    cout << r;
+    cout << endl;
     return 0;
 }
