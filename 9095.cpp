@@ -9,22 +9,21 @@ int a[MAX];
 int main()
 {
     a[0] = 1;
-    int n, r = 0;
+    int n;
+    int result = 0;
     cin >> n;
 
-    for (int k = 0; k < n; k++)
+    for (int k = 1; k <= n; k++)
     {
         for (int i = 1; i <= 3; i++)
         {
             int j = n - i;
-            if (j < 0) break;
-            r += a[j];
+            a[k] += a[j];
+            result += a[j];
         }
     }
 
-    a[n] = r;
-
-    cout << r;
+    cout << result;
     cout << endl;
     return 0;
 }
