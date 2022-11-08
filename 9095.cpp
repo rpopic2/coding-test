@@ -1,25 +1,28 @@
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 const size_t MAX = 10;
 
-int a[MAX];
 
 int main()
 {
-    //int T;
-    //cin >> T;
-    //int ns[T];
-    //for (int i = 0; i < T; i++)
-    //{
-        //cin >> ns[i];
-    //}
-    a[0] = 1;
-    int n;
-    cin >> n;
+    int T;
+    cin >> T;
 
-    for (int k = 1; k <= n; k++)
+    vector<int> ns;
+    for (int i = 0; i < T; i++)
+    {
+        int tmp;
+        cin >> tmp;
+        ns.push_back(tmp);
+    }
+    int max = *max_element(ns.begin(), ns.end());
+
+    int a[MAX];
+    a[0] = 1;
+    for (int k = 1; k <= max; k++)
     {
         for (int i = 1; i <= 3; i++)
         {
@@ -28,7 +31,9 @@ int main()
         }
     }
 
-    cout << a[n];
-    cout << endl;
+    for (int i = 0; i < T; i++)
+    {
+        cout << a[ns[i]] << "\n";
+    }
     return 0;
 }
