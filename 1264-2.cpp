@@ -1,12 +1,15 @@
+#include <cctype>
 #include <iostream>
+#include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 const string eof = "#";
 const string vowels = "aeiou";
 int vc = vowels.length();
-const string delims = ",.!?";
+const string delims = ",.!? ";
 
 int main()
 {
@@ -15,7 +18,9 @@ int main()
 
     while (true)
     {
-        cin >> curline;
+        getline(cin, curline);
+        transform(curline.begin(), curline.end(), curline.begin(), ::tolower);
+
         if (curline == eof) break;
         int cl = curline.length();
         int cc = 0;
