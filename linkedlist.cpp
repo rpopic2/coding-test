@@ -1,30 +1,36 @@
 #include <iostream>
 
 using namespace std;
+template<typename T>
 class element
 {
 public:
     element* next;
-    int v;
-    element(int val)
+    T v;
+    element(T val)
     {
         v = val;
     }
 };
 
+template<typename T>
 class list
 {
 public:
+    int len()
+    {
+        return len_;
+    }
     template<typename... Args>
     list(const Args&... vs)
     {
         add(vs...);
     }
     void add(){}
-    template<typename T, typename... Args>
-    element* add(const T& v, const Args&... vs)
+    template<typename U, typename... Args>
+    element<T>* add(const U& v, const Args&... vs)
     {
-        auto e = new element(v);
+        auto e = new element<T>(v);
         if(pfirst == 0)
         {
             pfirst = e;
@@ -35,14 +41,15 @@ public:
             plast->next = e;
             plast = e;
         }
+        len_++;
         add(vs...);
         return plast;
     }
 
     int deleteAt(int index)
     {
-        element* pcur = pfirst;
-        element* pprev = nullptr;
+        element<T>* pcur = pfirst;
+        element<T>* pprev = nullptr;
         for (int i = 0; i < index; i++)
         {
             pprev = pcur;
@@ -58,6 +65,7 @@ public:
         }
         int r = pcur->v;
         delete pcur;
+        len_--;
         return r; 
     }
 
@@ -66,11 +74,12 @@ public:
         return elemat(index)->v;
     }
 private:
-    element* pfirst = nullptr;
-    element* plast = nullptr;
-    element* elemat(int index)
+    int len_ = 0;
+    element<T>* pfirst = nullptr;
+    element<T>* plast = nullptr;
+    element<T>* elemat(int index)
     {
-        element* pcur = pfirst;
+        element<T>* pcur = pfirst;
         for (int i = 0; i < index; i++)
         {
             pcur = pcur->next;
@@ -81,9 +90,11 @@ private:
 
 int main()
 {
-    list ls(3, 4, 6);
+    list<int> ls(3, 4, 6);
     cout << ls.at(2);
-    ls.deleteAt(2);
+    cout << ls.len();
+    ls.deleteAt(1);
     cout << ls.at(1);
+    cout << ls.len();
 }
 
