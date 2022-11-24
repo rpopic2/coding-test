@@ -15,13 +15,11 @@ public:
 class list
 {
 public:
-    element* pfirst = nullptr;
-    element* plast = nullptr;
-
-    list()
+    template<typename... Args>
+    list(const Args&... vs)
     {
+        add(vs...);
     }
-
     void add(){}
     template<typename T, typename... Args>
     element* add(const T& v, const Args&... vs)
@@ -40,28 +38,52 @@ public:
         add(vs...);
         return plast;
     }
+
+    int deleteAt(int index)
+    {
+        element* pcur = pfirst;
+        element* pprev = nullptr;
+        for (int i = 0; i < index; i++)
+        {
+            pprev = pcur;
+            pcur = pcur->next;
+        }
+        if (pprev == nullptr)
+        {
+            pfirst = pcur->next;
+        }
+        else
+        {
+            pprev->next = pcur->next;
+        }
+        int r = pcur->v;
+        delete pcur;
+        return r; 
+    }
+
     int at(int index)
+    {
+        return elemat(index)->v;
+    }
+private:
+    element* pfirst = nullptr;
+    element* plast = nullptr;
+    element* elemat(int index)
     {
         element* pcur = pfirst;
         for (int i = 0; i < index; i++)
         {
             pcur = pcur->next;
         }
-        return pcur->v;
+        return pcur;
     }
-//private:
 };
 
 int main()
 {
-    list ls;
-    ls.add(3, 5, 6);
+    list ls(3, 4, 6);
     cout << ls.at(2);
-    //cout << ls;
-    //cout << ls.at(1);
-    //l.add(3);
-    //auto e = l.add(5);
-    //auto ev = e->front->v;
-    //std::cout << ev;
+    ls.deleteAt(2);
+    cout << ls.at(1);
 }
 
