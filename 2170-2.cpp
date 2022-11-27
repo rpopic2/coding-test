@@ -34,11 +34,13 @@ int main()
     sort(v.begin(), v.end(), sorter);
 
     long long cx, cy, r;
-    cx = 0;
-    cy = 0;
+    auto first = v.at(0);
+    cx = first.x;
+    cy = first.y;
     r = 0;
-    for (auto ln : v)
+    for (int i = 1; i < v.size(); i++)
     {
+        auto ln = v.at(i);
         auto x = ln.x;
         auto y = ln.y;
         if (y < cy) continue;
