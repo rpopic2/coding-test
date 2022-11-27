@@ -15,8 +15,8 @@ struct line
 };
 bool sorter(line ln1, line ln2)
 {
-    if(ln1.x == ln2.x) return ln1.y > ln2.y;
-    else return ln1.x > ln2.x;
+    if(ln1.x == ln2.x) return ln1.y < ln2.y;
+    else return ln1.x < ln2.x;
 }
 
 int main()
@@ -33,6 +33,11 @@ int main()
         v.push_back(ln);
     }
     sort(v.begin(), v.end(), sorter);
+
+    for (auto& ln : v)
+    {
+        cout << ln.x << ln.y << "\n";
+    }
     
     size_t cx, cy, r;
     cx = 0;
