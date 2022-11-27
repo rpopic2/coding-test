@@ -17,3 +17,17 @@ for each v :
         set cury to vy
 
 return r
+
+method 2
+
+read line
+save first pair
+
+read line
+for N
+if this pair is in range
+    add to the pair
+if not create a new pair
+
+for each pair
+    add to its len to result
