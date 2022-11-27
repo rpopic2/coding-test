@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -6,8 +5,8 @@ using namespace std;
 
 struct line
 {
-    size_t x, y;
-    line(size_t x_, size_t y_)
+    long long x, y;
+    line(long long x_, long long y_)
     {
         x = x_;
         y = y_;
@@ -21,20 +20,20 @@ bool sorter(line ln1, line ln2)
 
 int main()
 {
-    size_t N;
+    int N;
     cin >> N;
 
     vector<line> v;
     for (int i = 0; i < N; i++)
     {
-        int x, y;
+        long long x, y;
         cin >> x >> y;
         line ln(x, y);
         v.push_back(ln);
     }
     sort(v.begin(), v.end(), sorter);
 
-    size_t cx, cy, r;
+    long long cx, cy, r;
     cx = 0;
     cy = 0;
     r = 0;
