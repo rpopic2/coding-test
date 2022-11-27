@@ -34,11 +34,6 @@ int main()
     }
     sort(v.begin(), v.end(), sorter);
 
-    for (auto& ln : v)
-    {
-        cout << ln.x << ln.y << "\n";
-    }
-    
     size_t cx, cy, r;
     cx = 0;
     cy = 0;
