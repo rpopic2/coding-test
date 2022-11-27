@@ -1,0 +1,19 @@
+given N of (x, y) as vector v of (x, y)
+let curx, cury for current iteration of x and y
+let int r for result
+
+sort v vector numerical order
+
+for each v :
+    if vy is less than cury :
+        skip this element
+    if vx is less or equal than cury :
+        set cury to vy
+    
+    if is the last element :
+    if vx is greater than cury :
+        add cury - curx to r
+        set curx to vx
+        set cury to vy
+
+return r

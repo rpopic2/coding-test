@@ -1,0 +1,44 @@
+3. algorithms
+
+* big O notation
+O (upper bound)
+Omega (lower bound)
+Theta (upper == lower bound)
+
+commonly seen:
+O(n^2)
+O(n log n)
+O(n)
+O(log n)
+O(1)
+
+* linear search
+    just searching left to right
+    O(n)
+    Omega(1)
+
+* binary search
+    (phonebook tearing)
+    O(log n) -> keep halving
+    Omega(1)
+
+
+sort
+* selection sort
+    keep moving the lowest number to the ith position
+    O(n^2 + n)/2
+    ~= O(n^2)
+    Omega(n^2) => does not leverage from already sorted array
+
+* bubble sort
+    iterate till n-2
+    compare two (i, i+1) and swap if needed
+    ~= O(n^2)
+    Omega(n)
+
+* merge sort
+    done by recursion. sort left half and sort right half and merge sort it.
+    O(n log n)
+    Omega(n log n)
+    (theta n log n)
+
