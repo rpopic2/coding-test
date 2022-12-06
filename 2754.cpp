@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 int main()
 {
@@ -23,13 +24,6 @@ int main()
     case 'D':
         result = 1;
         break;
-    case 'F':
-        cout << 0.0f;
-        return 0;
-        break;
-    default:
-        cout << "Invalid grade.";
-        return 0;
     }
 
     switch (sec)
@@ -41,6 +35,6 @@ int main()
         result += 0.3f;
         break;
     }
-    cout << result;
+    cout << fixed << setprecision(1) << result;
     return 0;
 }
