@@ -10,7 +10,7 @@ int main()
     cin >> a;
     while (cin >> a >> b)
     {
-        buf += to_string(a + b) + "/n";
+        buf += to_string(a + b) + "\n";
     }
     cout << buf;
 }
