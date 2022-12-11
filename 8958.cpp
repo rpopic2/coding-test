@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-inline void write_score(string s, string *buf);
+inline void write_score(string *s, string *buf);
 int main()
 {
     ios::sync_with_stdio(false);
@@ -11,15 +11,15 @@ int main()
     cin >> ibuf;
     while (cin >> ibuf)
     {
-        write_score(ibuf, &obuf);
+        write_score(&ibuf, &obuf);
     }
     cout << obuf;
 }
 
-inline void write_score(string s, string *buf)
+inline void write_score(string *s, string *buf)
 {
     int tmp = 0, r = 0;
-    for (auto &c : s)
+    for (auto &c : *s)
     {
         if (c == 'O')
         {

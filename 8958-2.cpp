@@ -1,29 +1,30 @@
 #include <iostream>
+#include <cstring>
 #include <string>
 using namespace std;
+constexpr int LEN = 80;
 
-inline void write_score(string s, string *buf);
+int add_up(int i);
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    string obuf, ibuf;
-    cin >> ibuf;
-    while (cin >> ibuf)
+
+    int r = 0;
+
+
+    char dummy[LEN];
+    while (cin.getline(dummy, LEN, 'O'))
     {
-        write_score(ibuf, &obuf);
+        char buf[LEN];
+        cin.getline(buf, LEN, 'X');
+        auto i = strlen(buf) + 1;
+        r += add_up(i);
     }
-    cout << obuf;
+    cout << r - 1;
 }
 
-inline void write_score(string s, string *buf)
+int add_up(int i)
 {
-    char *p = &s[0];
-    int result;
-    for (int i = 0; i < s.length(); ++p)
-    {
-        cout << *p;
-    }
-    cout << endl;
-    *buf += to_string(result);
+    return i * (1 + i) / 2;
 }
