@@ -1,0 +1,8 @@
+*
+!*.cpp
+!*.rs
+!*.txt
+!*.cs
+!*.js
+!*.py
+!readme.md
