@@ -1,0 +1,12 @@
+[
+    {
+        "directory": "/Users/rpopic2/CodingTest",
+        "file": "*.cpp",
+        "command": "/usr/bin/clang++ -std=c++14 -Wall"
+    },
+    {
+        "directory": "/Users/rpopic2/CodingTest",
+        "file": "*.c",
+        "command": "/usr/bin/clang"
+    }
+]
