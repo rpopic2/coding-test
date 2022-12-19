@@ -1,25 +1,25 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <algorithm>
 
 void get_inputs(std::vector<int> *inputs)
 {
-    int cnt;
-    std::cin >> cnt;
+    std::cin.ignore(10, '\n');
     for (int i; std::cin >> i;)
     {
         inputs->push_back(i);
     }
 }
-void generate_primes(std::vector<int> *primes, int max)
+void generate_primes(std::unordered_map<int, bool> *primes, int max)
 {
-    primes->push_back(2);
+    primes->insert(std::pair<int, bool>(2, true));
     for (int i = 3; i <= max; ++i)
     {
         bool is_prime = true;
         for (const auto &j : *primes)
         {
-            if (i % j == 0)
+            if (i % j.first == 0)
             {
                 is_prime = false;
                 break;
@@ -27,7 +27,7 @@ void generate_primes(std::vector<int> *primes, int max)
         }
         if (is_prime)
         {
-            primes->push_back(i);
+            primes->insert(std::pair<int, bool>(i, true));
         }
     }
 }
@@ -36,7 +36,8 @@ int main()
     std::cin.tie(nullptr);
     std::ios::sync_with_stdio(false);
 
-    std::vector<int> inputs, primes;
+    std::vector<int> inputs;
+    std::unordered_map<int, bool> primes;
     get_inputs(&inputs);
     int max = 0;
     max = *std::max_element(inputs.begin(), inputs.end());
@@ -45,7 +46,7 @@ int main()
     int cnt_primes = 0;
     for (const auto &i : inputs)
     {
-        if (*std::find(primes.begin(), primes.end(), i) == i)
+        if (primes[i])
         {
             ++cnt_primes;
         }
