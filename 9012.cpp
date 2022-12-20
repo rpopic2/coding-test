@@ -1,25 +1,28 @@
 #include <iostream>
+using namespace std;
 constexpr int BIG_NUM = 1 << 16;
 
-void cnt_parens(std::string &buf)
+void cnt_parens(string &buf)
 {
-    if (std::cin.peek() == EOF) return;
-    int paren_to_resolve = 0;
+    int parens_to_resolve = 0;
     char c;
-    while (std::cin.get(c))
+    while (cin.get(c) && c != '\n')
     {
-        if (c == '(') ++paren_to_resolve;
-        else if (c == ')') --paren_to_resolve;
-        if (c == '\n' || paren_to_resolve < 0) break;
+        if (c == '(') ++parens_to_resolve;
+        else --parens_to_resolve;
+        if (parens_to_resolve < 0) break;
     }
-    buf += paren_to_resolve == 0 ? "YES\n" : "NO\n";
-    if (c != '\n') std::cin.ignore(BIG_NUM, '\n');
+    buf += parens_to_resolve == 0 ? "YES\n" : "NO\n";
+    if (c != '\n') cin.ignore(BIG_NUM, '\n');
 }
 
 int main()
 {
-    std::string buf = "";
-    std::cin.ignore(1 << 16, '\n');
-    while (!std::cin.eof()) cnt_parens(buf);
-    std::cout << buf;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    string buf = "";
+    cin.ignore(1 << 16, '\n');
+    while (cin.peek() != EOF) cnt_parens(buf);
+    cout << buf;
 }
+
