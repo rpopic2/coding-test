@@ -3,33 +3,31 @@
 #include <optional>
 #include <memory>
 using namespace std;
-constexpr streamsize BIG_NUM = 1 << 16;
 
 class tri_graph
 {
 public:
-    void init(vector<int> *v);
+    void init(const vector<int> *v);
     int traverse_from(int start_index);
 private:
+    vector<int> get_edges(int i);
     void fn(const int last_cost, const int index);
-    vector<int> *vec;
+    const vector<int> *vec;
     int v_size;
     optional<int> min_cost;
-    vector<vector<int>> edges;
 };
-void tri_graph::init(vector<int> *vec_)
+void tri_graph::init(const vector<int> *vec_)
 {
     vec = vec_;
     v_size = vec->size();
-    for (int i = 0; i < v_size; ++i)
-    {
+}
+vector<int> tri_graph::get_edges(int i)
+{
         auto mod = i % 3;
-        vector<int> v;
-        if (mod == 0) v = vector<int>{i+1, i+3, i+4};
-        else if (mod == 1) v = vector<int>{i+1, i+2, i+3, i+4};
-        else if (mod == 2) v = vector<int>{i+2, i+3};
-        edges.push_back(v);
-    }
+        if (mod == 0) return {i+1,i+3,i+4};
+        else if (mod == 1) return {i+1,i+2,i+3,i+4};
+        else if (mod == 2) return {i+2,i+3};
+        else throw;
 }
 int tri_graph::traverse_from(int start_index)
 {
@@ -46,7 +44,7 @@ void tri_graph::fn(const int last_cost, const int index)
         }
         else min_cost = last_cost;
     }
-    for (const auto &e : edges[index])
+    for (const auto &e : get_edges(index))
     {
         if (e >= v_size) break;
         int cur_cost = last_cost + vec->at(e);
@@ -58,23 +56,24 @@ int main()
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     int test_no = 1;
+    vector<int> v;
     while (true)
     {
         int n;
         cin >> n;
         if (n == 0) return 0;
-        vector<int> v;
+        v.clear();
         int v_size = n * 3 - 1;
-        for (int i = 0, c; i < v_size; ++i)
+        v.resize(v_size);
+        for (int i = 0; i < v_size; ++i)
         {
-            cin >> c;
-            v.push_back(c);
+            cin >> v[i];
         }
-        int dummy;
-        cin >> dummy;
         tri_graph graph;
         graph.init(&v);
         cout << test_no << ". " << graph.traverse_from(1)<< '\n';
         ++test_no;
+        string dummy;
+        cin >> dummy;
     }
 }
