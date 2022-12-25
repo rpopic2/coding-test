@@ -1,13 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <optional>
-#include <memory>
 using namespace std;
 
 class tri_graph
 {
 public:
-    void init(const vector<int> *v);
+    tri_graph(const vector<int> *v);
     int traverse_from(int start_index);
 private:
     vector<int> get_edges(int i);
@@ -16,7 +15,7 @@ private:
     int v_size;
     optional<int> min_cost;
 };
-void tri_graph::init(const vector<int> *vec_)
+tri_graph::tri_graph(const vector<int> *vec_)
 {
     vec = vec_;
     v_size = vec->size();
@@ -69,8 +68,7 @@ int main()
         {
             cin >> v[i];
         }
-        tri_graph graph;
-        graph.init(&v);
+        tri_graph graph(&v);
         cout << test_no << ". " << graph.traverse_from(1)<< '\n';
         ++test_no;
         string dummy;
