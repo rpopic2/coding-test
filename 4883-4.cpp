@@ -7,7 +7,7 @@ using namespace std;
 constexpr int COL = 3;
 struct node
 {
-    int i = -1, j = -1, cost = 0;
+    int cost = 0, i = -1, j = -1;
 };
 typedef vector<array<node, COL>> matrix;
 matrix dp;
@@ -24,7 +24,7 @@ optional<node> try_get(const matrix &mat, const int i, const int j)
     if (i >= mat.size() || j >= COL) return{};
     return {mat[i][j]};
 }
-bool step(const matrix &mat, int &i, int &j)
+void step(const matrix &mat, int i, int j)
 {
     auto orig_cost = mat[i][j].cost;
     optional<node> min;
@@ -40,11 +40,8 @@ bool step(const matrix &mat, int &i, int &j)
         auto val = min.value();
         i = val.i;
         j = val.j;
-        dp[i][j].cost = orig_cost + val.cost;
-        if (i == 0 && j == 1) return false;
-        return true;
+        dp[i][j] = {orig_cost + val.cost};
     }
-    else return false;
 }
 int main()
 {
@@ -65,9 +62,12 @@ int main()
     int i = row - 1, j = 1;
     dp.resize(row);
     dp[i][j].cost = mat[i][j].cost;
-    while (step(mat, i, j)){};
+    for (int i = 0; i < row; ++i)
+    {
+        for (int j = 0; j < COL; ++i)
+        {
+            step(mat, i , j);
+        }
+    }
     cout << endl << dp[i][j].cost;
-
-
-
 }
