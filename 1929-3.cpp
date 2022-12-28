@@ -1,16 +1,14 @@
-#include <bitset>
 #include <unistd.h>
-using namespace std;
-constexpr int NOT_PRIME = 1;
-constexpr int MAX_VAL = 1'000'001;
-constexpr int BUF_SIZE = 1 << 16;
+#include <stdio.h>
+#include <bitset>
+constexpr int BUF_SIZE = 1 << 15;
 
-char buf[BUF_SIZE], *p = buf;
-char * const buf_end = buf + BUF_SIZE;
+char rbuf[BUF_SIZE], *p = rbuf;
+char * const buf_end = rbuf + BUF_SIZE;
 inline void buf_flush()
 {
-    write(1, buf, p - buf);
-    p = buf;
+    write(1, rbuf, p - rbuf);
+    p = rbuf;
 }
 inline void buf_write(int num)
 {
@@ -25,9 +23,9 @@ int main()
 {
     int n, m;
     scanf("%d %d", &n, &m);
-    bitset<MAX_VAL> nums;
+    std::bitset<1000001> nums;
     
-    nums[1] = NOT_PRIME;
+    nums[1] = 1;
     if (n <= 2)
     {
         buf_write(2);
@@ -35,10 +33,10 @@ int main()
     }
     for (int i = 3; i <= m; i += 2)
     {
-        if (nums[i] == NOT_PRIME) continue;
+        if (nums[i]) continue;
         for (int j = 2; i * j <= m; ++j)
         {
-            nums[i * j] = NOT_PRIME;
+            nums[i * j] = 1;
         }
         if (i >= n) buf_write(i);
     }
