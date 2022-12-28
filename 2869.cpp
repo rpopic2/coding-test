@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 int main()
@@ -8,11 +9,10 @@ int main()
 
     int mv_day, mv_night, height;
     cin >> mv_day >> mv_night >> height;
-    int result = 1 + height / (mv_day - mv_night);
-    int mod = height % (mv_day - mv_night);
-    if (mod == 0)
+    int ans = (1 + (height - mv_day) / (mv_day - mv_night));
+    if ((height - mv_day) % (mv_day - mv_night))
     {
-        result -= mv_day;
+        ++ans;
     }
-    cout << result;
+    cout << ans;
 }
