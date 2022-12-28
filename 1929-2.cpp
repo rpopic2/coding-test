@@ -8,25 +8,23 @@ constexpr int MAX_VAL = 1'000'000;
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int m, n;
-    cin >> m >> n;
+    int n, m;
+    cin >> n >> m;
     string buf;
 
     bool nums[MAX_VAL + 1];
     
     nums[1] = NOT_PRIME;
-    for (int i = 3; i <= n; ++i)
+    for (int i = 3; i <= m; ++i)
     {
         if (nums[i] == NOT_PRIME) continue;
-        for (int j = 2; i * j <= n; ++j)
+        for (int j = 2; i * j <= m; ++j)
         {
             nums[i * j] = NOT_PRIME;
         }
     }
-    if (m <= 2) buf = "2\n";
-    for (int i = m; i <= n; ++i)
+    if (n <= 2) buf = "2\n";
+    for (int i = n; i <= m; ++i)
     {
         if (i % 2 == 0) continue;
         if (nums[i] == NOT_PRIME) continue;
