@@ -1,5 +1,4 @@
 #include <unistd.h>
-#include <stdio.h>
 #include <bitset>
 constexpr int BUF_SIZE = 1 << 15;
 
@@ -34,7 +33,7 @@ int main()
     for (int i = 3; i <= m; i += 2)
     {
         if (nums[i]) continue;
-        for (int j = 2; i * j <= m; ++j)
+        for (int j = 3; i * j <= m; ++j)
         {
             nums[i * j] = 1;
         }
