@@ -7,11 +7,11 @@
 /* boilerplates */
 #include <unistd.h>
 constexpr size_t BUF_SIZE = 1 << 16;
-char rbuf[BUF_SIZE], *p = rbuf;
+char obuf[BUF_SIZE], *p = obuf;
 void buf_flush()
 {
-    write(1, rbuf, p - rbuf);
-    p = rbuf;
+    write(1, obuf, p - obuf);
+    p = obuf;
 }
 
 /* List of custom buf writers
@@ -76,7 +76,7 @@ int main()
 {
     bufw_ln(40003);
     buf_flush();
-    bufw(10);
+    bufw(0);
     buf_flush();
     bufw_s("hello world", 10);
     bufrw_s("hello world", 10);

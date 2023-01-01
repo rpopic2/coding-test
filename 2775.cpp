@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 using namespace std;
 constexpr int MAX_SIZE = 14;
 
@@ -6,7 +7,8 @@ int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    int dp[MAX_SIZE + 1][MAX_SIZE];
+    array<array<int, MAX_SIZE>, MAX_SIZE + 1> dp;
+
     for (int j = 0; j < MAX_SIZE; ++j)
     {
         dp[0][j] = j + 1;
