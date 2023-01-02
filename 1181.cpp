@@ -5,8 +5,8 @@ using namespace std;
 
 bool comp(string &lhs, string &rhs)
 {
-    if (lhs.size() > rhs.size()) return false;
-    else if (lhs.size() < rhs.size()) return true;
+    if (lhs.length() > rhs.length()) return false;
+    else if (lhs.length() < rhs.length()) return true;
     else return lhs < rhs;
 
 }
@@ -23,10 +23,9 @@ int main()
         cin >> vec[i];
     }
     sort(vec.begin(), vec.end(), comp);
-    auto unique_end = unique(vec.begin(), vec.end());
-    vec.resize(distance(vec.begin(), unique_end));
     for (const auto &s : vec)
     {
-        cout << s << '\n';
+        auto ps = &s;
+        if (*--ps != s) cout << s << '\n';
     }
 }
