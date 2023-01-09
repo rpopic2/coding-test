@@ -51,4 +51,3 @@ int main() {
     cout << buf << "-1";
 }
 
-
