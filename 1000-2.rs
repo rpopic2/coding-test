@@ -1,5 +1,4 @@
 use std::io::{self, Read, Write};
-
 fn main(){
     let mut buffer = [0;3];
     io::stdin()
