@@ -8,5 +8,5 @@ int main() {
     int result = 1;
     for (; result <= N; result <<= 1) {
     }
-        cout << (result >> 1) << endl;
+    cout << (result >> 1) << endl;
 }
