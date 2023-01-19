@@ -1,65 +1,54 @@
+//보는 사람을 배려하는 코드를 짜자
+#include <algorithm>
 #include <iostream>
+#include <set>
 #include <vector>
 using namespace std;
-//보는 사람을 배려하는 코드를 짜자
-int main() {
-    int n;
-    int k;
-    vector<int> dp;
-    cin >> n >> k;
-    dp.resize(n);
-    for (int c, i = 0; i < n; ++i) {
-        cin >> dp[i];
+class sorter {
+public:
+    bool operator()(const int &lhs, const int &rhs) const {
+        return lhs > rhs;
     }
-    dp[1] = 1;
-    dp[2] = (1,1)(2) 2.
-    dp[5] = (5) (11111) (2;
-    dp[10] = dp[5] + dp[5];
-    dp[10] = dp[5] + dp[2] + 2 + 1;
-}
+};
 
-// 1 * 10
-// 5 5
-// 5 2 2 1
-// 
-// n = 1 (1)
-// k = 1 ? k = n
-// 
-// n = 2 [1, 2] [2] [1]
-// [1, 2] 11 2 -> 2
-// [2] 2 -> 1
-// [1] 1 -> 1
-//
-// n = 3 [1, 2, 3] [1, 3] [2, 3] [3] [1, 2] [1] [2]
-// [1, 2, 3] 12 111 3 -> dp[1] + dp[1, 2] + dp[3]
-// [1, 3] 111 3 -> dp[1] + dp[3]
-// [2, 3] 3 -> dp[2] + dp[3]
-// [1, 2] 111 12 -> dp[1] + dp[2] + 112
-// [3] 3
-// [1] 111
-// [2] x
-//
-// n = 4 [1,2,3,4] [1,2,3] [1,2,4] [2,3,4] | [1,2] [1,3] [1,4] [2,3] [2,4] [3,4] | [1] [2] [3] [4]
-// [1] 1111
-// [2] 22
-// [3] x
-// [4] 4
-// [1,2] -> dp[1] + dp[2] + 112 //1,2로 만들수 있는 경우의 
-// [1,3] -> dp[1] + dp[3] + 13 //permutations with 1,3
-// [1,4] -> dp[1] + dp[4]
-// [2,3] -> dp[2] + dp[3]
-// [2,4] -> dp[2] + dp[4]
-// [3,4] -> dp[3] + dp[4]
-// [1,2,3] -> dp[1,2] + dp[1,3] + dp[2,3] 
-// [1,2,4] -> [1,2], [1,4], [2,4]
-// [2,3,4] -> [2,3], [3,4], [2,4]
-// [1,2,3,4] -> ...
-//
-// n = 10
-// [1,2,5] -> dp.. 5221 52111
-// [1,2] -> [1] [2] 11111'1112 11111'122 11112'22 11222'2 
-// [2,5] -> [2] [5]
-// [1,5] -> [1] [5] 51111'1
-// [1] -> 11111'11111
-// [2] -> 22222
-// [5] -> 55
+int main() {
+    int N, K;
+    cin >> N >> K;
+    set<int, sorter> coins;
+    int value;
+    for (int i = 0; i < N; ++i) {
+        cin >> value;
+        if (value > K) continue;
+        coins.insert(value);
+    }
+    const int coin_max = *coins.cbegin();
+
+    vector<vector<int>> dp(coin_max + 1);
+    dp[1].resize(2);
+    dp[1][1] = 1;
+    for (int i = 2; i <= K; ++i) {
+        dp[i] = vector<int>(i, 0);
+        for (const auto &coin : coins) {
+            if (coin > i) break;
+            else if (coin == i )
+            {
+                dp[i][coin] = 1;
+                continue;
+            }
+            auto diff = i - coin;
+            dp[i][coin] = dp[diff][std::min(diff, coin)];
+        }
+    }
+    int acc = 0;
+    //for (int i = 0; i <= coin_max; ++i) {
+        //acc += dp[K][i];
+    //}
+    for (const auto &i : dp) {
+        for (const auto &j : dp) {
+            for (const auto &k : j) {
+                cout << k;
+            }
+        }
+    }
+    //cout << acc;
+}
