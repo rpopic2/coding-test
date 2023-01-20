@@ -14,6 +14,7 @@ int main() {
         ls.push_front(ls.back());
         ls.pop_back();
         if (ls.size() == 1) break;
+        cout << ls.size() << endl;
     }
     cout << ls.front();
 }
