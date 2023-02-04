@@ -1,12 +1,19 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 using namespace std;
 
 int main() {
     int N;
     cin >> N;
-    int result = 1;
-    for (; result <= N; result <<= 1) {
+    queue<int> q;
+    for (int i = 1; i <= N; ++i) {
+        q.push(i);
     }
-    cout << (result >> 1) << endl;
+    while (q.size() > 1) {
+        q.pop();
+        auto front = q.front();
+        q.push(front);
+        q.pop();
+    }
+    cout << q.front();
 }
