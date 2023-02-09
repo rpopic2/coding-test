@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include <stack>
 using namespace std;
 using vertex = pair<int, int>;
 using matrix = vector<vector<int>>;
@@ -10,22 +9,22 @@ constexpr array<vertex, 4> DIRECTIONS {
     vertex{1, 0}, {0, 1}, {-1, 0}, {0, -1}
 };
 
-// global decl
+// globals
 int N;
 int current_max = 0;
-vector<vector<int>> memo;
+int memo[502][502];
 
-// traverses the forest.
+// traverses the forest. dp + dfs.
 inline int traverse_forest(const matrix &forest, const vertex start) {
-    matrix visited(N, vector<int>(N, 0));
 
-    // validity checking
+    auto [x, y] = start;
+    auto &current_memo = memo[x][y];
+    if (current_memo != 0) return current_memo;
+
+    // validity checking. this is a directed graph where childen are greater than parent.
     auto is_valid = [&](const vertex pos, const vertex dest) {
         auto [x, y] = dest;
         if (x < 0 || x >= N || y < 0 || y >= N) {
-            return false;
-        }
-        if (visited[x][y]) {
             return false;
         }
         if (forest[pos.first][pos.second] >= forest[x][y]) {
@@ -34,47 +33,24 @@ inline int traverse_forest(const matrix &forest, const vertex start) {
         return true;
     };
 
-    // init
-    static stack<pair<vertex, int>> s;
-    s.push({start, 1});
-    int max_depth = 0;
-
-    // traversal
-    while (true) {
-        auto [pos, depth] = s.top();
-        auto [x, y] = pos;
-        s.pop();
-        max_depth = max(depth, max_depth);
-        visited[x][y] = true;
-        auto &cur_memo = memo[x][y];
-        cout << x << "," << y << ": " << depth << "m" << cur_memo << "  ";
-        bool has_memo = false;
-        if (cur_memo != 0) {
-            auto memo_depth = cur_memo + depth - 1;
-            memo[start.first][start.second] = memo_depth;
-            max_depth = max(memo_depth, max_depth);
-            has_memo = true;
+    // get the greatest adjacent node
+    int adjacent_max = 0;
+    for (const auto &dir : DIRECTIONS) {
+        vertex dest = {x + dir.first, y + dir.second};
+        if (!is_valid(start, dest)) {
+            continue;
         }
-        bool is_end_node = true;
-        for (const auto &dir : DIRECTIONS) {
-            if (has_memo) break;
-            vertex dest = {x + dir.first, y + dir.second};
-            if (!is_valid(pos, dest)) continue;
-            is_end_node = false;
-            s.push({dest, depth + 1});
-        }
-        if (s.empty()) {
-            memo[start.first][start.second] = max_depth;
-            return max_depth;
-        }
+        int at_dest = traverse_forest(forest, dest);
+        adjacent_max = max(adjacent_max, at_dest);
     }
-    return -1;
+
+    current_memo = adjacent_max + 1;
+    return current_memo;
 }
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
     cin >> N;
-    memo = vector<vector<int>>(N, vector<int>(N));
     
     // read forest from input
     matrix forest(N, vector<int>(N));
@@ -84,13 +60,13 @@ int main() {
         }
     }
 
-    //for each vertex, do traversal
+    //for each vertex, traverse and update max number.
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
             auto result = traverse_forest(forest, {i, j});
             current_max = max(current_max, result);
-            cout << result << "/"<< current_max << endl << endl;
         }
     }
+
     cout << current_max << '\n';
 }
