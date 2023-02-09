@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include <bitset>
 #include <queue>
 using namespace std;
 using vertex = pair<int, int>;
@@ -14,51 +13,56 @@ constexpr array<vertex, 4> directions {
 
 int N, M;
 matrix maze;
-matrix visited;
+
+inline int read_digit() {
+    char c;
+    do {
+        c = cin.get();
+    } while (c == '\n' || c == ' ');
+    return c - '0';
+}
 
 bool is_valid(vertex v) {
     auto x = v.first;
     auto y = v.second;
     if (x < 0 || x >= N || y < 0 || y >= M) return false;
-    if (visited[x][y] == 1) return false;
+    if (maze[x][y] == 0) return false;
     return true;
 }
 
+//traverses from 0, 0 to N - 1, M - 1
+//get length of the shortest path
 int bfs_traverse() {
-    int count = 1;
-    queue<vertex> q;
-    q.push({0, 0});
-    visited[0][0] = true;
+    queue<pair<vertex, int>> q; //queue of vertex and depth.
+    q.push({{0, 0}, 1}); //x, y, depth
     while (!q.empty()) {
-        auto _pair = q.front();
-        auto x = _pair.first;
-        auto y = _pair.second;
+        auto [pos, depth] = q.front();
+        auto [x, y] = pos;
         q.pop();
-        count += 1;
-        if (x == N - 1 && y == M - 1) return count;
-        cout << x << ", " << y << ::endl;
+        if (maze[x][y] == 0) continue;
+        maze[x][y] = 0;
+        if (x == N - 1 && y == M - 1) return depth;  //destination node
         for (const auto &dir : directions) {
             vertex adjacent{dir.first + x, dir.second + y};
-            if(is_valid(adjacent)) {
-                q.push(adjacent);
-                visited[adjacent.first][adjacent.second] = true;
+            if (is_valid(adjacent)) {
+                q.push({adjacent, depth + 1});
             }
         }
     }
-    return count;
+    return -1;
 }
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
     cin >> N >> M;
+
+    //fill in the maze from input
     maze = matrix(N, vector<int>(M));
-    visited = matrix(N, vector<int>(M, 0));
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < M; ++j) {
-            auto c = cin.get();
-            if (c == '\n') continue;
-            maze[i][j] = c - '0';
+            maze[i][j] = read_digit();
         }
     }
+
     cout << bfs_traverse() << ::endl;
 }
