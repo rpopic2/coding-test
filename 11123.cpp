@@ -9,12 +9,9 @@ constexpr array<pair<int, int>, 4> DIRECTIONS = {
     pair<int, int>{0, 1}, {0, -1}, {1, 0}, {-1, 0}
 };
 
-bool dfs_traverse(vector<vector<char>> &matrix, const pair<int, int> start, const int H, const int W) {
-    // short circuiting. if starting point is a grass, return immediately.
-    if (matrix[start.first][start.second] == GRASS) return false;
-
+// whether given start point is a flock of sheeps or not
+inline void dfs_remove_flock(vector<string> &matrix, const pair<int, int> start, const int H, const int W) {
     // validity checker
-    vector<vector<bool>> visited(H, vector<bool>(W));
     auto is_valid = [&](pair<int, int> vertex) {
         auto [x, y] = vertex;
         if (x < 0 || x >= H || y < 0 || y >= W) return false;
@@ -23,7 +20,7 @@ bool dfs_traverse(vector<vector<char>> &matrix, const pair<int, int> start, cons
     };
 
     // init
-    stack<pair<int ,int>> s;
+    static stack<pair<int ,int>> s;
     s.push(start);
 
     // dfs traversal
@@ -33,13 +30,11 @@ bool dfs_traverse(vector<vector<char>> &matrix, const pair<int, int> start, cons
         matrix[x][y] = GRASS;
         for (const auto &dir : DIRECTIONS) {
             pair<int, int> neighbour{dir.first + x, dir.second + y};
-            if (is_valid(neighbour)) {
-                s.push(neighbour);
-            }
+            if (!is_valid(neighbour)) continue;
+            else s.push(neighbour);
         }
 
     }
-    return true;
 }
 
 int main() {
@@ -53,21 +48,26 @@ int main() {
         cin >> H >> W;
 
         // read the matrix in
-        vector<vector<char>> matrix(H, vector<char>(W));
-        for (int i = 0; i < H; ++i) {
-            string line;
+        vector<string> matrix(H, string(W, GRASS));
+        for (auto &line : matrix) {
             cin >> line;
-            for (int j = 0; j < W; ++j) {
-                matrix[i][j] = line[j];
-            }
         }
+
+        // for each vertex, traverse the graph
         int sheep_flocks = 0;
         for (int i = 0; i < H; ++i) {
             for (int j = 0; j < W; ++j) {
-                sheep_flocks += dfs_traverse(matrix, {i, j}, H, W);
+                if (matrix[i][j] == GRASS) continue;
+                sheep_flocks += 1;
+                dfs_remove_flock(matrix, {i, j}, H, W);
             }
         }
-        // traverse the graph
         cout << sheep_flocks << '\n';
     }
 }
+
+// pitfalls i've gone through:
+// 1. using bfs will cause memory exeed
+// 2. checking for visited will slow down by 200ms. removing sheeps if checked is faster
+// 3. using std::string instead of std::vector<char> is simpler if input does not contain whitespaces
+// 4. when using std::vector<std::string>, calling "fill-in constructor"; when initialising std::string inside std::vector, is faster than not calling it, because c++ would have to keep re-allocating the std::vector if string size is unknown.
