@@ -7,12 +7,19 @@ using namespace std;
 
 constexpr char newl = '\n';
 
+int at_or_zero(const vector<int> &vec, int at) {
+    if (at < 0) return 0;
+    auto size = vec.size();
+    if (at >= size) return 0;
+    return vec[at];
+}
+
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
     int N, K;
     cin >> N >> K;
 
-    map<int, int> cage;
+    vector<int> cage(1'000'000, 0);
     int max_cage_index = 0;
 
     int _ice_amount, _pos;
@@ -24,22 +31,17 @@ int main() {
 
 
     int current_max = 0;
+    int current_window = 0;
 
 
-    for (int j = K; j <= max_cage_index - K; ++j) {
+    for (int j = 0; j <= max_cage_index; ++j) {
         auto bear_index = j;
         auto left_idx = max(bear_index - K, 0);
         auto right_idx = min(bear_index + K, max_cage_index);
 
-        auto accumulate = 0;
-        //cout << left_idx << ":" << right_idx << endl;
-        for (int i = left_idx; i <= right_idx; ++i) {
-            auto current_val = cage[i];
-            if (current_val == 0) continue;
-            accumulate += current_val;
-            //cout << current_val << endl;
-        }
-        current_max = max(current_max, accumulate);
+        current_window -= at_or_zero(cage, left_idx);
+        current_window += at_or_zero(cage, right_idx);
+        current_max = max(current_max, current_window);
     }
 
     cout << current_max << ::newl;
