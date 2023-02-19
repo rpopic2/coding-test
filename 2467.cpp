@@ -6,6 +6,7 @@
 using namespace std;
 
 int main() {
+    cin.tie(nullptr)->sync_with_stdio(false);
     // read input
     int N;
     cin >> N;
@@ -25,7 +26,7 @@ int main() {
     for (const auto &liq : liquids) {
 
         // perform a binary search for indicies on the left of the current liquid (the input is given sorted)
-        auto sim = upper_bound(++start, liquids.end(), liq * -1);
+        auto sim = std::upper_bound(++start, liquids.end(), liq * -1);
 
         // lambda fn for updating best pair and sum.
         auto update = [&]() {
