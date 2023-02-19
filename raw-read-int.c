@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 /* boilerplates */
-#define IBUF_SIZ 4
+#define IBUF_SIZ 1024
 char ibuf[IBUF_SIZ], *p = ibuf;
 /* read int */
 int readint()

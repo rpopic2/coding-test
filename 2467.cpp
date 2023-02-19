@@ -11,52 +11,49 @@ int main() {
     int N;
     cin >> N;
 
-    // liquids are given sorted
     vector<int> liquids(N);
     for (int i = 0; i < N; ++i) {
         cin >> liquids[i];
     }
 
-    // setup
     int best_sum = numeric_limits<int>::max();
     pair<int, int> best_pair;
     auto start = liquids.begin();
 
-    // for each negative liquids (it loops at least once, so it can handle positive-only inputs)
+    // 매 용액마다
     for (const auto &liq : liquids) {
 
-        // perform a binary search for indicies on the left of the current liquid (the input is given sorted)
-        auto sim = std::upper_bound(++start, liquids.end(), liq * -1);
+        // 이분 탐색해서 현재 용액보다 큰 용액 찾기
+        auto simmilar = std::upper_bound(++start, liquids.end(), liq * -1);
 
-        // lambda fn for updating best pair and sum.
+        // 가장 합이 0에 가까운 용액이 있다면 업데이트
         auto update = [&]() {
             //check for validity
-            if (sim == liquids.end()) return;
+            if (simmilar == liquids.end()) return;
 
-            int sum = *sim + liq;
+            int sum = *simmilar + liq;
             sum = ::abs(sum);
 
             if (sum < best_sum) {
                 best_sum = sum;
-                best_pair = {liq, *sim};
+                best_pair = {liq, *simmilar};
             }
         };
 
-        // this update() will be called twice, checking at the upper_bound and after it.
-        // first update on the upper_bound
+        // 현재 용액에 업데이트
         update();
 
-        // this safe guard ensure that update() will not compare itself
-        if (sim == start) continue;
-        // second update on before the upper_bound
-        --sim;
+        // 
+        if (simmilar == start) continue;
+        // 현재 용액 이전도 확인. 
+        --simmilar;
         update();
 
-        // we don't need to compare positive liquids
+        // 양수 용액이면 더 이상 탐색할 필요가 없음. 양수만 있으면 맨 왼쪽 둘이 정답.
         if (liq > 0) break;
     }
 
-    // print out the best pair
+    // 0에 가장 가까운 용액 출력
     auto [l, r] = best_pair;
     cout << l << ' ' << r << '\n';
 }

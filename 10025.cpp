@@ -5,15 +5,15 @@ using namespace std;
 constexpr char newl = '\n';
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
     // read input
+    cin.tie(nullptr)->sync_with_stdio(false);
     int N, K;
     cin >> N >> K;
 
     vector<int> cage(1'000'000, 0);
     int cage_size = 0;
 
-    // read ice buckets from input
+    // 양동이 읽기
     for (int i = 0; i < N; ++i) {
         static int _ice_amount;
         static int _pos;
