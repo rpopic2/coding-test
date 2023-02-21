@@ -136,6 +136,7 @@ void iterator_post_increment() {
     {
         *iter = ARBITARY_SMALL;
     }
+    std::cout << sizeof(std::vector<int>::iterator) << std::endl;
 }
 
 int main()

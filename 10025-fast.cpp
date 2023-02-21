@@ -1,17 +1,17 @@
-#include <cstdio>
-#include <iostream>
+#pragma GCC optimize("Ofast")
 #include <unistd.h>
-constexpr int IBUF_SIZ = (1 << 20) + (1 << 17);
+constexpr int IBUF_SIZ = 1 << 16;
 
-char ibuf[IBUF_SIZ], *p = ibuf + IBUF_SIZ;
+char ibuf[IBUF_SIZ];
+int idx = 0;
+size_t bytes_read = 0;
 
 inline char get() {
-    if (p == ibuf + IBUF_SIZ) {
-        //syscall(0, 0, ibuf, IBUF_SIZ);
-        fread(ibuf, 1, IBUF_SIZ, stdin);
-        p = ibuf - 1;
+    if (idx == bytes_read) {
+        bytes_read = syscall(0, 0, ibuf, IBUF_SIZ);
+        idx = 0;
     }
-    return *++p;
+    return ibuf[idx++];
 }
 
 inline int readint()
@@ -29,7 +29,6 @@ inline int readint()
 
 int main() {
     // read input
-    //syscall(0, 0, ibuf, IBUF_SIZ);
     int N, K;
     N = readint();
     K = readint();
@@ -69,8 +68,7 @@ int main() {
     for (int j = digits; j--; num /= 10) q[j] = num % 10 + '0';
     q += digits;
 
-    //syscall(1, 1, obuf, q - obuf);
-    write(1, obuf, q - obuf);
+    syscall(1, 1, obuf, q - obuf);
 }
 
 
