@@ -1,33 +1,30 @@
-#include <iostream>
 #include <unistd.h>
 #include <stdio.h>
-/* boilerplates */
-#define IBUF_SIZ 8160
-char ibuf[IBUF_SIZ], *p = ibuf;
-/* read int */
-int readint()
-{
-    
-    int result = *p++ - '0';
-    while (1)
-    {
-        int j = *p;
-        if (j == '\n' || j == ' ' || j == '\0') break;
-        result *= 10;
-        result += j - '0';
-        ++p;
+
+constexpr int IBUF_SIZ = 1 << 16;
+auto i = 1 << 10;
+
+char ibuf[IBUF_SIZ];
+int idx = 0;
+long bytes_read = 0;
+
+inline char get() {
+    if (idx == bytes_read) {
+        bytes_read = syscall(0, 0, ibuf, IBUF_SIZ);
+        idx = 0;
     }
-    return result;
+    return ibuf[idx++];
 }
 
-int main(void)
+inline int readint()
 {
-
-    read(0, &ibuf, IBUF_SIZ);
-    read(0, &ibuf, IBUF_SIZ);
-    //std::cout << ibuf;
-    //int result = readint();
-    //printf("%d\n", result);
-    //result = readint();
-    //printf("%d\n", result);
+    char c = get();
+    int result = 0;// c - '0';
+    while (c >= '0')
+    {
+        result *= 10;
+        result += c - '0';
+        c = get();
+    }
+    return result;
 }

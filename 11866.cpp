@@ -3,28 +3,42 @@
 using namespace std;
 
 int main() {
-    cin.tie(nullptr)->sync_with_stdio(false);
     int N, K;
     cin >> N >> K;
+
+
+    vector<int> people;
+    people.reserve(N);
+    for (int i = 1; i <= N; ++i) {
+        people.push_back(i);
+    }
 
     vector<int> yosepus;
     yosepus.reserve(N);
 
-    int next_remove = 0;
+    auto iter = people.begin();
 
-    for (int i = 1; i <= N; ++i) {
-        next_remove += K;
-        if (next_remove > N) {
-            next_remove %= N;
+    auto advance = [&iter, &people] {
+        if (++iter == people.end()) {
+            iter = people.begin();
         }
-        cout << next_remove << endl;
-        yosepus.push_back(next_remove);
-    }
+    };
 
+    while (people.size() != 0) {
+        for (int i = 0; i < K - 1; ++i) {
+            advance();
+        }
+        yosepus.push_back(*iter);
+        iter = people.erase(iter);
+        if (iter == people.end()) {
+            iter = people.begin();
+        }
+    }
+    
     cout << '<';
     for (int i = 0; i < N - 1; ++i) {
         cout << yosepus[i] << ", ";
     }
-    cout << yosepus[N - 1] << '>' << '\n';
-
+    cout << yosepus[N - 1];
+    cout << ">\n";
 }
