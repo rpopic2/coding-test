@@ -1,5 +1,6 @@
-/* See 1717-2.cpp for proper impementation that works in O(a(n))
- *
+/* 
+ * /!\ This is not my final code! /!\
+ *  See 1717-2.cpp for proper impementation that works in O(a(n))
  */
 
 #pragma GCC optimize("Ofast")
