@@ -35,26 +35,26 @@ private:
 
 // the dijkstra's algorithm
 int graph::dijkstra() {
-    std::vector<bool> visited(num_nodes + 1, false);
+    std::vector<bool> visited(num_nodes + STARTS_FROM, false);
     std::priority_queue<edge> pq;
     pq.emplace(STARTS_FROM, 0); // distance to START_NODE is 0
 
     while (!pq.empty()) {
-        auto [cur_node, cur_cost] = pq.top();
+        auto [cur_node, cur_weight] = pq.top();
         pq.pop();
 
         // return early if arrived at the end node
         if (cur_node == end_node)
-            return cur_cost;
+            return cur_weight;
 
         if (visited[cur_node])
             continue;
 
         visited[cur_node] = true;
         // push unvisited adjacent nodes
-        for (const auto &[dest, cost] : adj_list[cur_node]) {
+        for (const auto &[dest, weight] : adj_list[cur_node]) {
             if (!visited[dest])
-                pq.emplace(dest, cur_cost + cost);
+                pq.emplace(dest, cur_weight + weight);
         }
     }
     return -1;
