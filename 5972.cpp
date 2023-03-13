@@ -1,58 +1,80 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <limits>
 
-constexpr static auto I32_MAX = std::numeric_limits<int>::max();
-constexpr static int START_NODE = 1;
+struct edge {
+    int node, weight;
 
-using edge = std::pair<int, int>;
+    edge(int node__, int weight__)
+        : node(node__), weight(weight__) {}
+
+    bool operator<(const edge &rhs) const noexcept {
+        return weight > rhs.weight;
+    }
+};
+
+class graph {
+public:
+    graph(int num_nodes__) :
+        adj_list(num_nodes__ + STARTS_FROM), num_nodes(num_nodes__)
+    , end_node(num_nodes) {}
+
+    void add_edge(int src_node, int dest_node, int weight) {
+        adj_list[src_node].emplace_back(dest_node, weight);
+        adj_list[dest_node].emplace_back(src_node, weight);
+    }
+
+    int dijkstra();
+
+private:
+    std::vector<std::vector<edge>> adj_list;
+    int num_nodes;
+    int end_node;
+    constexpr static int STARTS_FROM = 1;
+};
+
+// the dijkstra's algorithm
+int graph::dijkstra() {
+    std::vector<bool> visited(num_nodes + STARTS_FROM, false);
+    std::priority_queue<edge> pq;
+    pq.emplace(STARTS_FROM, 0); // distance to START_NODE is 0
+
+    while (!pq.empty()) {
+        auto [cur_node, cur_weight] = pq.top();
+        pq.pop();
+
+        // return early if arrived at the end node
+        if (cur_node == end_node)
+            return cur_weight;
+
+        if (visited[cur_node])
+            continue;
+
+        visited[cur_node] = true;
+        // push unvisited adjacent nodes
+        for (const auto &[dest, weight] : adj_list[cur_node]) {
+            if (!visited[dest])
+                pq.emplace(dest, cur_weight + weight);
+        }
+    }
+    return -1;
+}
 
 int main() {
     std::cin.tie(nullptr)->sync_with_stdio(false);
 
-    int nodes_count;
-    int edges_count;
+    int nodes_count, edges_count;
     std::cin >> nodes_count >> edges_count;
 
-    std::vector<std::vector<edge>> adj_list(nodes_count + 1);
+    // Create adjacency list from input
+    graph graph(nodes_count);
 
-    {
-        int node_a, node_b;
-        int cost;
-
-        for (int i = 0; i < edges_count; ++i) {
-            std::cin >> node_a >> node_b;
-            std::cin >> cost;
-            adj_list[node_a].emplace_back(node_b, cost);
-            adj_list[node_b].emplace_back(node_a, cost);
-        }
+    for (int i = 0; i < edges_count; ++i) {
+        int node_a, node_b, weight;
+        std::cin >> node_a >> node_b >> weight;
+        graph.add_edge(node_a, node_b, weight);
     }
 
-    std::vector<int> shortest_distances(nodes_count + 1, I32_MAX);
-
-    std::priority_queue<edge> pq;
-    pq.emplace(START_NODE, 0); // distance to START_NODE is 0
-    shortest_distances[START_NODE] = 0;
-
-    while (!pq.empty()) {
-        auto [cur_node, cur_cost] = pq.top();
-        pq.pop();
-
-        if (cur_cost > shortest_distances[cur_node])
-            continue;
-
-        for (const auto &[dest, cost] : adj_list[cur_node]) {
-            auto &shortest_to_dest = shortest_distances[dest];
-            auto &shortest_to_cur = shortest_distances[cur_node];
-
-            if (shortest_to_dest > shortest_to_cur + cost) {
-                shortest_to_dest = shortest_to_cur + cost;
-                pq.emplace(dest, shortest_distances[dest]);
-            }
-        }
-    }
-
-    std::cout << shortest_distances[nodes_count] << '\n';
+    std::cout << graph.dijkstra() << '\n';
 }
 

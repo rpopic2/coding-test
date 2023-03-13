@@ -14,15 +14,15 @@ struct edge {
 };
 
 class graph {
+public:
     using edge_t = ::edge;
     using adj_list_t = std::vector<std::vector<edge_t>>;
 
-public:
-    graph(int num_nodes) : _adj_list(num_nodes + 1), _num_nodes(num_nodes) {}
+    graph(int num_nodes)
+        : _adj_list(num_nodes + 1), _num_nodes(num_nodes) {}
 
-    void add_edge(int start, int dest, int weight) {
+    inline void add_edge(int start, int dest, int weight) {
         _adj_list[start].emplace_back(dest, weight);
-        // adj_list[dest].emplace_back(start, weight);
     }
 
     int djikstra(int start, int dest) const;
@@ -41,7 +41,7 @@ int graph::djikstra(int start, int dest) const {
     while (!pq.empty()) {
         auto [cur_node, cur_weight] = pq.top();
         pq.pop();
-    
+
         if (cur_node == dest)
             return cur_weight;
 
@@ -60,15 +60,14 @@ int graph::djikstra(int start, int dest) const {
 
 int main() {
     std::cin.tie(nullptr)->sync_with_stdio(false);
-    // edge: node, weight
 
     int num_nodes, num_edges, dest;
     std::cin >> num_nodes >> num_edges >> dest;
 
     graph graph(num_nodes);
 
+    int start, end, weight;
     for (int i = 0; i < num_edges; ++i) {
-        static int start, end, weight;
         std::cin >> start >> end >> weight;
         graph.add_edge(start, end, weight);
     }

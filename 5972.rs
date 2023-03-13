@@ -15,8 +15,8 @@ fn main() {
             let a = input.next().unwrap();
             let b = input.next().unwrap();
             let c = input.next().unwrap();
-            tmp[a].push((b, c));
-            tmp[b].push((a, c));
+            tmp[a].push((c, b));
+            tmp[b].push((c, a));
         }
         tmp
     };
@@ -24,13 +24,13 @@ fn main() {
     let mut visited = vec![false; n + 1];
 
     let mut pq = BinaryHeap::new();
-    pq.push(Reverse((1usize, 0usize)));
+    pq.push(Reverse((0usize, 1usize)));
 
-    while let Some(Reverse((cur_node, cur_weight))) = pq.pop() {
+    while let Some(Reverse((cur_weight, cur_node))) = pq.pop() {
 
         if cur_node == n {
             println!("{}", cur_weight);
-            break;
+            return;
         }
 
         if visited[cur_node] {
@@ -39,9 +39,9 @@ fn main() {
 
         visited[cur_node] = true;
 
-        for (node, weight) in &adj_list[cur_node] {
+        for (weight, node) in adj_list[cur_node].iter() {
             if !visited[*node] {
-                pq.push(Reverse((*node, *weight + cur_weight)));
+                pq.push(Reverse((*weight + cur_weight, *node)));
             }
         }
     }
