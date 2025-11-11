@@ -16,5 +16,14 @@ int main() {
         }
         auto sum = accumulate(scores.begin(), scores.end(), 0);
         float average = sum / static_cast<float>(student_count);
+
+	int count = 0;
+	for (int i = 0; i < student_count; ++i) {
+		if (scores[i] > average) {
+			count += 1;
+		}
+	}
+	float ratio = count / (float)student_count;
+	printf("%.3f%%\n", ratio * 100);
     }
 }
