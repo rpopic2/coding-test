@@ -9,8 +9,8 @@ loop: (Cur_Day :: 0; N, DP)
 
     @try_work Cur_Day + T, P;
     @try_work Cur_Day + 1, 0;
-    Cur_day > N ->
-        Cur_Day ++
+    Cur_day > N -> (*Cur_Day)
+        *Cur_Day ++
         loop->
 
 std:print [DP .at N] =>
