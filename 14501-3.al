@@ -1,7 +1,7 @@
 #alias std:io:scan
 
 N :: scan(usize) N =>
-DP :: std:arr(i32):new N + 1 =>
+DP :: std:arr(i32):new ^N + 1 =>
 Cur_Day :: 0
 
 loop:
