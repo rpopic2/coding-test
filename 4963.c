@@ -12,8 +12,8 @@ typedef unsigned long long u64;
 #define forceinline __attribute__((always_inline))
 #define cold __attribute__((cold))
 
-#define SRC_SIZE 1 << 17
-#define SINK_SIZE 1 << 17
+#define SRC_SIZE 1 << 13
+#define SINK_SIZE 1 << 9
 
 struct io {
     char *buf;
@@ -22,7 +22,7 @@ struct io {
 
 // in
 
-forceinline
+// forceinline
 char get_c(struct io *io) {
     if (unlikely(io->cur == io->end)) {
         io->cur = 0;
@@ -95,6 +95,54 @@ void put_int(struct io *io, int num) {
     put_uint(io, (unsigned)num);
 }
 
+typedef int map_t[50][50];
+
+typedef struct point {
+    int x; int y;
+
+} point;
+
+point add(point lhs, point rhs) {
+    return (point){ lhs.x + rhs.x, lhs.y + rhs.y };
+}
+
+map_t map;
+int w, h;
+point q[1 << 9], *qp = q;
+int count;
+
+const point directions[] = {
+    {0, 1}, {0, -1}, {-1, 0}, {1, 0},
+    {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
+};
+const size_t directions_len = sizeof directions / sizeof directions[0];
+
+u8 is_valid(point p) {
+    return p.x >= 0 && p.y >= 0
+        && p.x < w && p.y < h;
+}
+
+void bfs(int x, int y) {
+    qp = q;
+    *qp++ = (point){x, y};
+
+    while (q != qp) {
+        point back = *--qp;
+        map[back.x][back.y] = 0;
+
+        for (int i = 0; i < directions_len; ++i) {
+            point dir = directions[i];
+            point next = add(back, dir);
+            if (is_valid(next) && map[next.x][next.y] == 1) {
+                *qp++ = next;
+            }
+        }
+    }
+    count += 1;
+}
+
+
+int main(void) {}
 // int main(void) {
 int __libc_start_main(void) {
     _Alignas(64) char srcbuf[SRC_SIZE];
@@ -103,11 +151,33 @@ int __libc_start_main(void) {
     struct io *src = &(struct io){.buf = srcbuf};
     struct io *sink = &(struct io){.buf = sinkbuf};
 
+    while (1) {
+        w = get_uint(src), h = get_uint(src);
+        if (w == 0)
+            break;
+
+        for (int i = 0; i < h; ++i) {
+            for (int j = 0; j < w; ++j) {
+                u8 b = get_c(src) - '0';
+                get_c(src);
+                map[j][i] = b;
+            }
+        }
+
+        for (int i = 0; i < h; ++i) {
+            for (int j = 0; j < w; ++j) {
+                if (map[j][i])
+                    bfs(j, i);
+            }
+        }
+        put_int(sink, count);
+        put_c(sink, '\n');
+        count = 0;
+    }
+
     write(STDOUT_FILENO, sinkbuf, sink->cur);
     _exit(0);
 }
-
-int main(void) {}
 
 inline static void try_flush(struct io *io, u64 size) {
     if (unlikely(io->cur + size == SINK_SIZE)) {
