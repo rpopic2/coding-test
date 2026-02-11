@@ -77,9 +77,17 @@ int get_int(struct io *io) {
 // out
 
 forceinline
-void flush(struct io *io);
+void flush(struct io *io) {
+    write(STDOUT_FILENO, io->buf, io->cur);
+}
+
 forceinline
-void try_flush(struct io *io, u64 size);
+void try_flush(struct io *io, u64 size) {
+    if (unlikely(io->cur + size == SINK_SIZE)) {
+        flush(io);
+        io->cur = 0;
+    }
+}
 
 forceinline
 void put_c(struct io *io, u8 c) {
@@ -117,9 +125,9 @@ void print_uint(unsigned num) {
     write(STDOUT_FILENO, p, (size_t)(tmp + UINT_SIZE - p));
 }
 
-// int main(void) {}
-int main(void) {
-// int __libc_start_main(void) {
+int main(void) {}
+// int main(void) {
+int __libc_start_main(void) {
     _Alignas(64) u8 srcbuf[SRC_SIZE];
     _Alignas(64) u8 sinkbuf[SINK_SIZE];
 
@@ -130,15 +138,3 @@ int main(void) {
     _exit(0);
 }
 
-forceinline
-void try_flush(struct io *io, u64 size) {
-    if (unlikely(io->cur + size == SINK_SIZE)) {
-        flush(io);
-        io->cur = 0;
-    }
-}
-
-forceinline
-void flush(struct io *io) {
-    write(STDOUT_FILENO, io->buf, io->cur);
-}
