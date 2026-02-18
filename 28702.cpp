@@ -3,18 +3,33 @@
 #include <vector>
 
 int main() {
-    int n, k;
-    std::cin >> n >> k;
+    std::string s[3];
+    std::cin >> s[0] >> s[1] >> s[2];
 
-    int counter = 0;
-    for (int i = 1; i <= n; ++i) {
-        if (n % i == 0) {
-            ++counter;
+    int nums[3] = {0};
+
+    for (int i = 0; i < 3; ++i) {
+        int num = 0;
+        try {
+            num = std::stoi(s[i]);
+        } catch (std::exception e){
+            continue;
         }
-        if (counter == k) {
-            std::cout << i;
-            return 0;
+        for (int j = i; j < 3; ++j) {
+            nums[j] = num + j - i;
         }
+        break;
     }
-    std::cout << '0';
+
+    int target = nums[2] + 1;
+
+    if (target % 3 == 0 && target % 5 == 0) {
+        std::cout << "FizzBuzz";
+    } else if (target % 3 == 0) {
+        std::cout << "Fizz";
+    } else if (target % 5 == 0) {
+        std::cout << "Buzz";
+    } else {
+        std::cout << target;
+    }
 }
